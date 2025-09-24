@@ -1,0 +1,147 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div>
+    <h1>Analyse des Données AAPL avec Filtres</h1>
+    
+    <!-- Filtres -->
+    <div style="margin-bottom: 20px; display: flex; gap: 20px; flex-wrap: wrap;">
+      <!-- Select pour choisir l'année -->
+      <div>
+        <label for="year">Année :</label>
+        <select name="year" id="year">
+          <option value="">All years</option>
+          <option value="2020">2020</option>
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+        </select>
+      </div>
+      
+      <!-- Select pour choisir le mois -->
+      <div>
+        <label for="month">Mois :</label>
+        <select name="month" id="month">
+          <option value="">All months</option>
+          <option value="01">Janvier</option>
+          <option value="02">Février</option>
+          <option value="03">Mars</option>
+          <option value="04">Avril</option>
+          <option value="05">Mai</option>
+          <option value="06">Juin</option>
+          <option value="07">Juillet</option>
+          <option value="08">Août</option>
+          <option value="09">Septembre</option>
+          <option value="10">Octobre</option>
+          <option value="11">Novembre</option>
+          <option value="12">Décembre</option>
+        </select>
+      </div>
+      
+      <!-- Select pour filtrer par range de prix -->
+      <div>
+        <label for="priceRange">Prix :</label>
+        <select name="priceRange" id="priceRange">
+          <option value="">All prices</option>
+          <option value="low">< 100$</option>
+          <option value="medium">100$ - 200$</option>
+          <option value="high">> 200$</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Div où le graphique sera affiché -->
+    <div id="myplot"></div>
+  </div>
+
+  <script>
+    // Importe la librairie Plot d'ObservableHQ
+    import * as Plot from "@observablehq/plot";
+    // Importe les données AAPL depuis un fichier JSON
+    import aapl from "../assets/aapl.json";
+
+    // Récupère les éléments select pour choisir les filtres
+    const selectYear = document.querySelector("#year");
+    const selectMonth = document.querySelector("#month");
+    const selectPriceRange = document.querySelector("#priceRange");
+
+    // Fonction pour convertir les dates string en objets Date et préparer les données
+    function prepareData(data) {
+      return data.map(d => ({
+        ...d,
+        Date: new Date(d.Date), // Conversion de la chaîne en objet Date
+        Close: +d.Close // S'assurer que Close est un nombre
+      }));
+    }
+
+    // Fonction pour afficher le graphique
+    function renderPlot() {
+      // Récupère les valeurs sélectionnées
+      const year = selectYear.value;
+      const month = selectMonth.value;
+      const priceRange = selectPriceRange.value;
+
+      // Sélectionne la div où le graphique sera affiché
+      const div = document.querySelector("#myplot");
+      
+      // Vide le contenu précédent de la div
+      div.innerHTML = "";
+
+      // Prépare les données (conversion des dates)
+      let filteredData = prepareData(aapl);
+      
+      if (year) {
+        filteredData = filteredData.filter(d => d.Date.getFullYear() === parseInt(year));
+      }
+      
+      if (month) {
+        filteredData = filteredData.filter(d => {
+          const monthStr = (d.Date.getMonth() + 1).toString().padStart(2, '0');
+          return monthStr === month;
+        });
+      }
+      
+      if (priceRange) {
+        if (priceRange === "low") {
+          filteredData = filteredData.filter(d => d.Close < 100);
+        } else if (priceRange === "medium") {
+          filteredData = filteredData.filter(d => d.Close >= 100 && d.Close <= 200);
+        } else if (priceRange === "high") {
+          filteredData = filteredData.filter(d => d.Close > 200);
+        }
+      }
+
+      // Crée le graphique avec Plot
+      const plot = Plot.plot({
+        marks: [
+          // Ajoute les points du graphique, filtrés selon les critères choisis
+          Plot.dot(filteredData, {
+            x: "Date", // Axe X : Date (maintenant un objet Date)
+            y: "Close", // Axe Y : Prix de clôture
+            stroke: "steelblue", // Couleur des points
+          }),
+        ],
+        // Ajouter des labels pour les axes
+        x: { 
+          label: "Date",
+          type: "utc" // Spécifie explicitement le type d'échelle pour les dates
+        },
+        y: { label: "Prix de clôture ($)" }
+      });
+      
+      // Ajoute le graphique à la div
+      div.append(plot);
+    }
+
+    // Ajoute des écouteurs d'événement pour le changement de tous les filtres (appel 'renderPlot')
+    selectYear.addEventListener("change", renderPlot);
+    selectMonth.addEventListener("change", renderPlot);
+    selectPriceRange.addEventListener("change", renderPlot);
+
+    // Affiche le graphique au chargement de la page
+    renderPlot();
+  </script>
+</Layout
