@@ -1,32 +1,188 @@
 ---
-import PlotFigure from "../components/PlotFigure.astro";
-import Layout from "../layouts/Layout.astro";
-import * as Plot from "@observablehq/plot";
-import penguins from "../assets/penguins.json";
+import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout>
-  <h1 class="text-2xl">Test Astro et Plot (Observablehq)</h1>
-  <PlotFigure
-    options={{
-      marks: [
-        Plot.dot(penguins, {
-          x: "culmen_length_mm",
-          y: "culmen_depth_mm",
-          stroke: "species",
-        }),
-      ],
-    }}
-  />
- 
-<div id="myplot"></div>
-<script type="module">
+<Layout title="Accueil - Astro Data Visualization">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-blue-50 via-white to-indigo-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Visualisation de 
+        <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          Données
+        </span>
+      </h1>
+      <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        Explorez nos différentes visualisations interactives de données. 
+        Des manchots aux voitures, découvrez des insights fascinants à travers des graphiques modernes.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/Simple-penguins" 
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
+        >
+          Commencer l'exploration
+          <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </a>
+        <a 
+          href="#projects" 
+          class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
+        >
+          Voir les projets
+        </a>
+      </div>
+    </div>
+  </section>
 
-import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
+  <!-- Projects Grid -->
+  <section id="projects" class="py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Nos Visualisations</h2>
+      <p class="text-lg text-gray-600">Découvrez nos différents projets de data visualization</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Simple Penguins -->
+      <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
+        <div class="h-48 bg-gradient-to-br from-cyan-100 to-blue-200 flex items-center justify-center">
+          <div class="text-6xl">🐧</div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Simple Penguins</h3>
+          <p class="text-gray-600 mb-4">Visualisation basique des données sur les manchots avec des graphiques simples et intuitifs.</p>
+          <a 
+            href="/Simple-penguins" 
+            class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group-hover:underline"
+          >
+            Voir le projet
+            <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
 
-const plot = Plot.rectY({length: 10000}, Plot.binX({y: "count"}, {x: Math.random})).plot();
-const div = document.querySelector("#myplot");
-div.append(plot);
+      <!-- Penguins Filtre -->
+      <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
+        <div class="h-48 bg-gradient-to-br from-emerald-100 to-green-200 flex items-center justify-center">
+          <div class="text-6xl">🔍</div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Penguins Filtre</h3>
+          <p class="text-gray-600 mb-4">Explorez les données des manchots avec des filtres interactifs pour affiner vos analyses.</p>
+          <a 
+            href="/Penguins-filtre" 
+            class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group-hover:underline"
+          >
+            Voir le projet
+            <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
 
-</script>
+      <!-- Penguins Sex -->
+      <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
+        <div class="h-48 bg-gradient-to-br from-pink-100 to-rose-200 flex items-center justify-center">
+          <div class="text-6xl">⚧️</div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Penguins Sexe</h3>
+          <p class="text-gray-600 mb-4">Analyse comparative des caractéristiques des manchots selon leur sexe.</p>
+          <a 
+            href="/Penguins-sex" 
+            class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group-hover:underline"
+          >
+            Voir le projet
+            <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- AAPL -->
+      <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
+        <div class="h-48 bg-gradient-to-br from-gray-100 to-slate-200 flex items-center justify-center">
+          <div class="text-6xl">📈</div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Apple Stock (AAPL)</h3>
+          <p class="text-gray-600 mb-4">Visualisation des données boursières d'Apple avec des graphiques financiers avancés.</p>
+          <a 
+            href="/Aapl" 
+            class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group-hover:underline"
+          >
+            Voir le projet
+            <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Cars -->
+      <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group md:col-span-2 lg:col-span-1">
+        <div class="h-48 bg-gradient-to-br from-orange-100 to-red-200 flex items-center justify-center">
+          <div class="text-6xl">🚗</div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Cars Dataset</h3>
+          <p class="text-gray-600 mb-4">Exploration des données automobiles avec analyse des performances et caractéristiques.</p>
+          <a 
+            href="/Cars" 
+            class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group-hover:underline"
+          >
+            Voir le projet
+            <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Fonctionnalités</h2>
+      <p class="text-lg text-gray-600">Ce que vous trouverez dans nos visualisations</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Graphiques Interactifs</h3>
+        <p class="text-gray-600">Des visualisations modernes et interactives pour explorer vos données en profondeur.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Filtres Avancés</h3>
+        <p class="text-gray-600">Filtrez et segmentez vos données selon différents critères pour des analyses ciblées.</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Performance Optimisée</h3>
+        <p class="text-gray-600">Chargement rapide et rendu fluide même avec de grandes quantités de données.</p>
+      </div>
+    </div>
+  </section>
 </Layout>
