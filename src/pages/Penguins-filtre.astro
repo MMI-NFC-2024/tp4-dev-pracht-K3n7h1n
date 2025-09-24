@@ -1,31 +1,74 @@
 ---
-import PlotFigure from "../components/PlotFigure.astro";
 import Layout from "../layouts/Layout.astro";
-import * as Plot from "@observablehq/plot";
-import penguins from "../assets/penguins.json";
-
 ---
 
 <Layout>
+  <div>
+    <h1>Analyse des Pingouins avec Filtre</h1>
+    
+   
+    <div style="margin-bottom: 20px;">
+      <label for="species">Choisir une espèce :</label>
+      <select name="species" id="species">
+        <option value="">All species</option>
+        <option value="Adelie">Adelie</option>
+        <option value="Chinstrap">Chinstrap</option>
+        <option value="Gentoo">Gentoo</option>
+      </select>
+    </div>
+    
+  
+    <div id="myplot"></div>
+  </div>
 
-<div id="myplot"></div>
-<script >
+  <script>
+  
+    import * as Plot from "@observablehq/plot";
+   
+    import penguins from "../assets/penguins.json";
 
-import * as Plot from "@observablehq/plot";
-import penguins from "../assets/penguins.json";
+ 
+    const selectSpecies = document.querySelector("#species");
 
 
-const plot = Plot.plot({
-      marks: [
-        Plot.dot(penguins, {
-          x: "culmen_length_mm",
-          y: "culmen_depth_mm",
-          stroke: "species",
-        }),
-      ],
-    });
-const div = document.querySelector("#myplot");
-div.append(plot);
+    function renderPlot() {
+    
+      const species = selectSpecies.value;
 
-</script>
+    
+      const div = document.querySelector("#myplot");
+      
+    
+      div.innerHTML = "";
+
+      
+      const filteredData = species ? 
+        penguins.filter(d => d.species === species) : 
+        penguins;
+
+      const plot = Plot.plot({
+        marks: [
+      
+          Plot.dot(filteredData, {
+            x: "culmen_length_mm", 
+            y: "culmen_depth_mm", 
+            stroke: "species", 
+          }),
+        ],
+        
+        x: { label: "Longueur du bec (mm)" },
+        y: { label: "Profondeur du bec (mm)" },
+        
+       
+      });
+      
+      
+      div.append(plot);
+    }
+
+    selectSpecies.addEventListener("change", renderPlot);
+
+    
+    renderPlot();
+  </script>
 </Layout>
