@@ -1,0 +1,114 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div>
+    <h1>Analyse des Pingouins avec Filtres Multiples</h1>
+    
+    <!-- Filtres -->
+    <div style="margin-bottom: 20px; display: flex; gap: 20px; flex-wrap: wrap;">
+      <!-- Select pour choisir l'espèce -->
+      <div>
+        <label for="species">Espèce :</label>
+        <select name="species" id="species">
+          <option value="">All species</option>
+          <option value="Adelie">Adelie</option>
+          <option value="Chinstrap">Chinstrap</option>
+          <option value="Gentoo">Gentoo</option>
+        </select>
+      </div>
+      
+      <!-- Select pour choisir l'île -->
+      <div>
+        <label for="island">Île :</label>
+        <select name="island" id="island">
+          <option value="">All islands</option>
+          <option value="Biscoe">Biscoe</option>
+          <option value="Dream">Dream</option>
+          <option value="Torgersen">Torgersen</option>
+        </select>
+      </div>
+      
+      <!-- Select pour choisir le sexe -->
+      <div>
+        <label for="sex">Sexe :</label>
+        <select name="sex" id="sex">
+          <option value="">All</option>
+          <option value="MALE">MALE</option>
+          <option value="FEMALE">FEMALE</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Div où le graphique sera affiché -->
+    <div id="myplot"></div>
+  </div>
+
+  <script>
+    // Importe la librairie Plot d'ObservableHQ
+    import * as Plot from "@observablehq/plot";
+    // Importe les données des manchots depuis un fichier JSON
+    import penguins from "../assets/penguins.json";
+
+    // Récupère les éléments select pour choisir les filtres
+    const selectSpecies = document.querySelector("#species");
+    const selectIsland = document.querySelector("#island");
+    const selectSex = document.querySelector("#sex");
+
+    // Fonction pour afficher le graphique
+    function renderPlot() {
+      // Récupère les valeurs sélectionnées
+      const species = selectSpecies.value;
+      const island = selectIsland.value;
+      const sex = selectSex.value;
+
+      // Sélectionne la div où le graphique sera affiché
+      const div = document.querySelector("#myplot");
+      
+      // Vide le contenu précédent de la div
+      div.innerHTML = "";
+
+      // Filtre les données selon les critères sélectionnés
+      let filteredData = penguins;
+      
+      if (species) {
+        filteredData = filteredData.filter(d => d.species === species);
+      }
+      
+      if (island) {
+        filteredData = filteredData.filter(d => d.island === island);
+      }
+      
+      if (sex) {
+        filteredData = filteredData.filter(d => d.sex === sex);
+      }
+
+      // Crée le graphique avec Plot
+      const plot = Plot.plot({
+        marks: [
+          Plot.dot(filteredData, {
+            x: "culmen_length_mm",
+            y: "culmen_depth_mm", 
+            stroke: "species", 
+          }),
+        ],
+        // Ajouter des labels pour les axes
+        x: { label: "Longueur du bec (mm)" },
+        y: { label: "Profondeur du bec (mm)" },
+   
+      });
+      
+      // Ajoute le graphique à la div
+      div.append(plot);
+    }
+
+    // Ajoute des écouteurs d'événement pour le changement de tous les filtres (appel 'renderPlot')
+    selectSpecies.addEventListener("change", renderPlot);
+    selectIsland.addEventListener("change", renderPlot);
+    selectSex.addEventListener("change", renderPlot);
+
+    // Affiche le graphique au chargement de la page
+    renderPlot();
+  </script>
+</Layout>
